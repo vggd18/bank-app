@@ -1,69 +1,67 @@
-# Sistema Bancário Simples (Multiusuário)
+# 🏦 Sistema Bancário Simples (v2.0 - OOP)
 
-Uma simulação de sistema bancário multiusuário via linha de comando, escrita em Python. O projeto permite que múltiplos usuários se cadastrem, façam login, criem múltiplas contas correntes e realizem operações de depósito, saque e extrato.
+Um projeto de console em Python que simula as operações básicas de um sistema bancário.
 
-## Funcionalidades
+Este projeto foi inicialmente desenvolvido como um script procedural e, posteriormente, **refatorado para uma arquitetura completa de Programação Orientada a Objetos (OOP)**, demonstrando a separação de responsabilidades, encapsulamento e herança.
 
-O sistema é dividido entre ações globais (sem login) e ações do usuário (logado):
+## ✨ Funcionalidades
 
-### Ações Globais
+O sistema permite que os usuários realizem as seguintes ações através de um menu interativo:
 
-  * **[c] Create User:** Cadastra um novo usuário no sistema (Nome, CPF, Senha, Endereço, Data de Nascimento).
-  * **[lin] Login:** Permite que um usuário cadastrado acesse sua conta usando CPF e Senha.
-  * **[q] Quit:** Encerra a aplicação.
+* **Gerenciamento de Clientes:**
+    * Criação de novos clientes (Pessoa Física).
+    * Autenticação de clientes (Login / Logout).
+    * Prevenção de clientes duplicados (validação por CPF).
+* **Gerenciamento de Contas:**
+    * Criação de contas correntes (múltiplas contas por cliente).
+    * Seleção de conta para realizar transações.
+* **Operações Bancárias:**
+    * **Depósito:** Adiciona valores à conta (apenas valores positivos).
+    * **Saque:** Retira valores da conta, sujeito a regras de negócio.
+    * **Extrato:** Exibe todo o histórico de transações e o saldo atual.
+* **Regras de Negócio (Conta Corrente):**
+    * Limite de **3 saques diários**.
+    * Valor máximo de **R$ 500,00 por saque**.
 
-### Ações do Usuário (Requer Login)
+## 🚀 Tecnologias Utilizadas
 
-  * **[ca] Create Checking Account:** Cria uma nova conta corrente vinculada ao usuário logado (Agência `0001` e um número de conta único).
-  * **[d] Deposit:** Adiciona um valor positivo ao saldo de uma conta específica do usuário.
-  * **[w] Withdraw:** Retira um valor de uma conta específica, sujeito a regras de limite.
-  * **[b] Balance:** Exibe o extrato (histórico de transações e saldo) de todas as contas vinculadas ao usuário.
-  * **[lout] Logout:** Desconecta o usuário atual, retornando ao menu global.
+* **Python 3**
+* Módulos nativos (`datetime`, `typing`)
 
-## Regras de Negócio
+## 🏛️ Arquitetura OOP
 
-A operação de saque possui as seguintes restrições, aplicadas **individualmente por conta**:
+O projeto foi reestruturado em torno de classes para gerenciar o estado e a lógica de negócios de forma organizada.
 
-1.  O valor do saque deve ser positivo.
-2.  O valor do saque não pode exceder o saldo da conta selecionada.
-3.  O limite máximo por saque é de **R$ 500,00**.
-4.  O limite máximo é de **3 saques por dia** *para aquela conta específica*.
 
-*Nota: Todos os dados (usuários, contas, saldos) são armazenados em memória e serão perdidos quando o script for encerrado.*
 
-## Como Usar
+* **`BankSystem`**: Classe orquestradora principal. Gerencia a lista de clientes, o cliente logado e o estado geral da aplicação, removendo a necessidade de variáveis globais.
+* **`Client` / `Person`**: `Client` é uma classe base para clientes, e `Person` herda dela, adicionando atributos específicos (nome, CPF, etc.). Gerencia os dados do cliente e suas contas.
+* **`Account` / `CurrencyAccount`**: `Account` é a classe base para contas, contendo a lógica de saldo e histórico. `CurrencyAccount` (Conta Corrente) herda de `Account` e sobrescreve o método `withdraw()` para implementar as regras de negócio (limites de saque).
+* **`History`**: Uma classe dedicada a encapsular e formatar o histórico de transações.
 
-### Pré-requisitos
+## 🏃 Como Executar
 
-  * Python 3.x
-
-### Instalação e Execução
-
-1.  Clone este repositório (ou apenas baixe o arquivo `.py`).
-
-2.  (Opcional, mas recomendado) Crie e ative um ambiente virtual (`venv`):
-
+1.  Clone este repositório:
     ```bash
-    # Criar o ambiente virtual
-    python -m venv venv
+    git clone [https://github.com/seu-usuario/seu-repositorio.git](https://github.com/seu-usuario/seu-repositorio.git)
     ```
-
+2.  Navegue até a pasta do projeto:
     ```bash
-    # Ativar no Windows
-    .\venv\Scripts\activate
+    cd seu-repositorio
     ```
-
-    ```bash
-    # Ativar no Linux/macOS
-    source venv/bin/activate
-    ```
-
-3.  **Dependências:** Este projeto não possui dependências externas e utiliza apenas bibliotecas padrão do Python (como `datetime`).
-
-4.  Execute o script principal (supondo que você o salvou como `main.py`):
-
+3.  Execute o script Python (vamos supor que seu arquivo se chame `banco.py`):
     ```bash
     python main.py
     ```
+4.  Siga as instruções no menu do console para interagir com o sistema.
 
-5.  Siga as instruções no terminal para criar um usuário, fazer login e interagir com o sistema.
+## 🧪 Como Testar
+
+O sistema pode ser testado manualmente seguindo o roteiro do menu, ou automaticamente via redirecionamento de entrada.
+
+1.  Crie um arquivo `testes.txt` com a sequência de comandos (veja exemplo abaixo).
+2.  Execute o script passando o arquivo como entrada:
+
+    ```bash
+    python banco.py < testes.txt
+    ```
